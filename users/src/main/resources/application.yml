@@ -4,7 +4,7 @@ spring:
       authorizationserver:
         issuer: http://127.0.0.1:9000
         client:
-          articles-client:
+          task-manager-client:
             registration:
               client-id: task-manager-client
               client-secret: "task-manager-secret"

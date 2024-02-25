@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.Customizer
+import org.springframework.security.config.Customizer.*
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.core.userdetails.User
@@ -14,7 +15,6 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
-
 @Configuration
 @EnableWebSecurity
 class DefaultSecurityConfig {
@@ -22,14 +22,14 @@ class DefaultSecurityConfig {
     @Order(1)
     fun authorizationServerSecurityFilterChain(http: HttpSecurity): SecurityFilterChain? {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http)
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer::class.java).oidc(Customizer.withDefaults()) // Enable OpenID Connect 1.0
-        return http.formLogin(Customizer.withDefaults()).build()
+        http.getConfigurer(OAuth2AuthorizationServerConfigurer::class.java).oidc(withDefaults()) // Enable OpenID Connect 1.0
+        return http.formLogin(withDefaults()).build()
     }
 
     @Bean
     @Order(2)
     fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.authorizeHttpRequests { authorizeRequests -> authorizeRequests.anyRequest().authenticated() }.formLogin(Customizer.withDefaults())
+        http.authorizeHttpRequests { authorizeRequests -> authorizeRequests.anyRequest().authenticated() }.formLogin(withDefaults())
         return http.build()
     }
 

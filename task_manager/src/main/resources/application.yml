@@ -9,7 +9,7 @@ spring:
           issuer-uri: http://127.0.0.1:9000
       client:
         registration:
-          articles-client-oidc:
+          task-manager-client-oidc:
             provider: spring
             client-id: task-manager-client
             client-secret: secret

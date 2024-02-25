@@ -9,22 +9,22 @@ import org.springframework.web.reactive.function.client.WebClient
 
 
 @RestController
-class TaskManagerController(private val webClient: WebClient) {
+class TaskManagerController() {
     @GetMapping("/task_manager/list")
     fun getArticles(): Array<String> {
         return arrayOf("Task 1", "Task 2")
     }
 
-    @GetMapping(value = ["/task_list"])
-    fun getArticles(
-        @RegisteredOAuth2AuthorizedClient("task-manager-client-authorization-code") authorizedClient: OAuth2AuthorizedClient
-    ): Array<String>? {
-        return webClient
-            .get()
-            .uri("http://127.0.0.1:8080/task_manager/list")
-            .attributes(oauth2AuthorizedClient(authorizedClient))
-            .retrieve()
-            .bodyToMono(Array<String>::class.java)
-            .block()
-    }
+//    @GetMapping(value = ["/task_list"])
+//    fun getArticles(
+//        @RegisteredOAuth2AuthorizedClient("task-manager-client-authorization-code") authorizedClient: OAuth2AuthorizedClient
+//    ): Array<String>? {
+//        return webClient
+//            .get()
+//            .uri("http://127.0.0.1:8080/task_manager/list")
+//            .attributes(oauth2AuthorizedClient(authorizedClient))
+//            .retrieve()
+//            .bodyToMono(Array<String>::class.java)
+//            .block()
+//    }
 }
