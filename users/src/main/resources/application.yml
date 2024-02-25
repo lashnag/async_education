@@ -19,7 +19,7 @@ spring:
                 - http://127.0.0.1:8080/authorized
               scopes:
                 - openid
-                - articles.read
+                - task-manager.read
 
 server:
   port: 9000
