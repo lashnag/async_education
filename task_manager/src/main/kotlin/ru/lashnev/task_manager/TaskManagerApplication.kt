@@ -1,11 +1,11 @@
-package ru.lashnev.async_education
+package ru.lashnev.task_manager
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class AsyncEducationApplication
+class TaskManagerApplication
 
 fun main(args: Array<String>) {
-    runApplication<AsyncEducationApplication>(*args)
+    runApplication<TaskManagerApplication>(*args)
 }

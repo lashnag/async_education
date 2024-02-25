@@ -1,10 +1,10 @@
-package ru.lashnev.async_education
+package ru.lashnev.users
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class AsyncEducationApplicationTests {
+class UsersApplicationTests {
 
     @Test
     fun contextLoads() {
