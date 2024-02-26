@@ -32,11 +32,6 @@ class ApiClientConfig {
             .authorizeHttpRequests { authorizeRequests -> authorizeRequests.anyRequest().authenticated() }
             .oauth2Login { oauth2Login -> oauth2Login.loginPage("/oauth2/authorization/task-manager-client-oidc") }
             .oauth2Client(withDefaults())
-
-        http.securityMatcher("/task_manager/**")
-            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager.read") }
-            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager.read") }
-            .oauth2ResourceServer { it.jwt(withDefaults()) }
         return http.build()
     }
 
