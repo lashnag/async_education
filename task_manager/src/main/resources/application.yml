@@ -7,3 +7,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://127.0.0.1:9001
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO

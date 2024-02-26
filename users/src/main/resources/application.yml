@@ -1,16 +1,19 @@
+server:
+  port: 9001
+
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:${server.port}
+          issuer-uri: http://127.0.0.1:9001
       authorizationserver:
-        issuer: http://127.0.0.1:${server.port}
+        issuer: http://127.0.0.1:9001
         client:
           task-manager-client:
             registration:
               client-id: task-manager-client
-              client-secret: "task-manager-secret"
+              client-secret: "{noop}secret"
               client-name: Task Manager Client
               client-authentication-methods:
                 - client_secret_basic
@@ -24,5 +27,9 @@ spring:
                 - openid
                 - task-manager.read
 
-server:
-  port: 9001
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
