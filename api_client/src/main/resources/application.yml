@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          task-manager-client-oidc:
+            provider: spring
+            client-id: task-manager-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: task-manager-client-oidc
+          task-manager-client-authorization-code:
+            provider: spring
+            client-id: task-manager-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: task-manager.read
+            client-name: task-manager-client-authorization-code
+        provider:
+          spring:
+            issuer-uri: http://127.0.0.1:9001

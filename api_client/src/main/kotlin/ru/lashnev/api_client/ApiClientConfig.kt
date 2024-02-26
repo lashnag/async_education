@@ -1,4 +1,4 @@
-package ru.lashnev.task_manager
+package ru.lashnev.api_client
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.reactive.function.client.WebClient
-
 
 @Configuration
 @EnableWebSecurity
@@ -33,13 +32,18 @@ class ApiClientConfig {
             .authorizeHttpRequests { authorizeRequests -> authorizeRequests.anyRequest().authenticated() }
             .oauth2Login { oauth2Login -> oauth2Login.loginPage("/oauth2/authorization/task-manager-client-oidc") }
             .oauth2Client(withDefaults())
+
+        http.securityMatcher("/task_manager/**")
+            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager.read") }
+            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager.read") }
+            .oauth2ResourceServer { it.jwt(withDefaults()) }
         return http.build()
     }
 
     @Bean
     fun authorizedClientManager(
         clientRegistrationRepository: ClientRegistrationRepository,
-        authorizedClientRepository: OAuth2AuthorizedClientRepository?
+        authorizedClientRepository: OAuth2AuthorizedClientRepository,
     ): OAuth2AuthorizedClientManager {
         val authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
             .authorizationCode()

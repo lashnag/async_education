@@ -1,8 +1,11 @@
 spring:
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://127.0.0.1:${server.port}
       authorizationserver:
-        issuer: http://127.0.0.1:9000
+        issuer: http://127.0.0.1:${server.port}
         client:
           task-manager-client:
             registration:
@@ -22,5 +25,4 @@ spring:
                 - task-manager.read
 
 server:
-  port: 9000
-
+  port: 9001
