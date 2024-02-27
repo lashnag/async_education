@@ -4,11 +4,8 @@ server:
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://127.0.0.1:9001
       authorizationserver:
-        issuer: http://127.0.0.1:9001
+        issuer: http://auth-server:9001
         client:
           task-manager-client:
             registration:

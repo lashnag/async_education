@@ -18,6 +18,17 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class DefaultSecurityConfig {
+//    @Bean
+//    @Order(1)
+//    fun permitAdminSecurityFilterChain(http: HttpSecurity): SecurityFilterChain? {
+//        http.authorizeHttpRequests { authorizeRequests ->
+//            authorizeRequests
+//                .requestMatchers("/admin/**")
+//                .permitAll()
+//        }
+//        return http.build()
+//    }
+
     @Bean
     @Order(1)
     fun authorizationServerSecurityFilterChain(http: HttpSecurity): SecurityFilterChain? {
@@ -29,7 +40,11 @@ class DefaultSecurityConfig {
     @Bean
     @Order(2)
     fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.authorizeHttpRequests { authorizeRequests -> authorizeRequests.anyRequest().authenticated() }.formLogin(withDefaults())
+        http.authorizeHttpRequests { authorizeRequests ->
+            authorizeRequests
+                .anyRequest()
+                .authenticated()
+        }.formLogin(withDefaults())
         return http.build()
     }
 
@@ -40,7 +55,7 @@ class DefaultSecurityConfig {
             .username("admin")
             .password("password")
             .passwordEncoder(encoder::encode)
-            .roles("USER")
+            .roles(Roles.USER.name)
             .build()
         return InMemoryUserDetailsManager(user)
     }
