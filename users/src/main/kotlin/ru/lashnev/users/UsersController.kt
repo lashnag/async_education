@@ -20,6 +20,8 @@ class UsersController(
     private val eventProducer: EventProducer,
 ) {
 
+    private val inMemoryUserDetailsManager = userDetailManager as InMemoryUserDetailsManager
+
     @PutMapping("/admin/create_user")
     fun addUser(login: String, password: String): ResponseEntity<String> {
         val user = User.builder()
@@ -28,9 +30,13 @@ class UsersController(
             .passwordEncoder(encoder::encode)
             .roles(Roles.USER.name)
             .build()
-        (userDetailManager as InMemoryUserDetailsManager).createUser(user)
-        eventProducer.addUser(user)
-        return ResponseEntity.accepted().build()
+        return if(!inMemoryUserDetailsManager.userExists(login)) {
+            inMemoryUserDetailsManager.createUser(user)
+            eventProducer.addUser(user)
+            ResponseEntity.accepted().build()
+        } else {
+            ResponseEntity.badRequest().build()
+        }
     }
 
     @PostMapping("/admin/change_user_role")
@@ -39,9 +45,12 @@ class UsersController(
             .username(login)
             .roles(roles.name)
             .build()
-        (userDetailManager as InMemoryUserDetailsManager).updateUser(user)
-        eventProducer.changeUserRole(user)
-        return ResponseEntity.accepted().build()
+        return if(inMemoryUserDetailsManager.userExists(login)) {
+            eventProducer.changeUserRole(user)
+            ResponseEntity.accepted().build()
+        } else {
+            ResponseEntity.badRequest().build()
+        }
     }
 
     companion object {
