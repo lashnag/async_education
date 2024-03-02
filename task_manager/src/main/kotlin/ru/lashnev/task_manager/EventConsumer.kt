@@ -19,7 +19,6 @@ class EventConsumer(private val userDao: UserDao) {
         props[ConsumerConfig.GROUP_ID_CONFIG] = "task_manager"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
-        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         KafkaConsumer<Any?, Any?>(props).use { consumer ->
             consumer.subscribe(listOf("CUD", "BE"))
             while (true) {
