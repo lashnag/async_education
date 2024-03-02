@@ -28,7 +28,7 @@ class UsersController(
             .username(login)
             .password(password)
             .passwordEncoder(encoder::encode)
-            .roles(Roles.USER.name)
+            .roles(Role.USER.name)
             .build()
         return if(!inMemoryUserDetailsManager.userExists(login)) {
             inMemoryUserDetailsManager.createUser(user)
@@ -40,10 +40,10 @@ class UsersController(
     }
 
     @PostMapping("/admin/change_user_role")
-    fun changeUserRole(login: String, roles: Roles): ResponseEntity<String> {
+    fun changeUserRole(login: String, role: Role): ResponseEntity<String> {
         val user = User.builder()
             .username(login)
-            .roles(roles.name)
+            .roles(role.name)
             .build()
         return if(inMemoryUserDetailsManager.userExists(login)) {
             eventProducer.changeUserRole(user)

@@ -3,7 +3,6 @@ package ru.lashnev.users
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.Customizer.*
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -47,7 +46,7 @@ class DefaultSecurityConfig {
             .username("admin")
             .password("password")
             .passwordEncoder(encoder::encode)
-            .roles(Roles.USER.name)
+            .roles(Role.USER.name)
             .build()
         return InMemoryUserDetailsManager(user)
     }
