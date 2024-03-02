@@ -22,7 +22,7 @@ spring:
                 - http://127.0.0.1:8080/authorized
               scopes:
                 - openid
-                - task-manager.read
+                - task-manager
 
 logging:
   level:

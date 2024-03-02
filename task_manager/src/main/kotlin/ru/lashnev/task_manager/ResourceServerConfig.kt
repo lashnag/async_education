@@ -13,7 +13,7 @@ class ResourceServerConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.securityMatcher("/task_manager/**")
-            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager.read") }
+            .authorizeHttpRequests { authorize -> authorize.anyRequest().hasAuthority("SCOPE_task-manager") }
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }
         return http.build()
     }
