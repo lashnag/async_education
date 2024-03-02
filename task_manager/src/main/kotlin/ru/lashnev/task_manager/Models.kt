@@ -15,10 +15,19 @@ enum class TaskStatus {
 }
 
 data class User(
-    val principal: String,
+    val login: String,
     val role: Role,
 )
 
 enum class Role {
     ADMIN, MANAGER, OTHER
+}
+
+data class ReplicationUser(
+    val login: String,
+    val role: ReplicationRole
+)
+
+enum class ReplicationRole {
+    USER, ADMIN, MANAGER, ACCOUNT
 }

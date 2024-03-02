@@ -24,7 +24,7 @@ class TaskManagerController(
             .getAllUsers()
             .filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
             .random()
-        val task = Task(UUID.randomUUID(), principal, taskDescription, assignedUser.principal)
+        val task = Task(UUID.randomUUID(), principal, taskDescription, assignedUser.login)
         taskDao.save(task)
         eventProducer.addTask(task)
         return "Created"
@@ -51,7 +51,7 @@ class TaskManagerController(
         val usersToAssign = userDao.getAllUsers().filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
         val openTasks = taskDao.getOpenTasks()
         openTasks.forEach {
-            taskDao.reassign(it, usersToAssign.random().principal)
+            taskDao.reassign(it, usersToAssign.random().login)
         }
         return "Reassigned"
     }

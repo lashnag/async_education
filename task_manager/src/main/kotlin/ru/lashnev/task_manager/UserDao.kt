@@ -19,6 +19,12 @@ class UserDao {
     }
 
     fun getUser(principal: String): User {
-        return users.find { it.principal == principal }!!
+        return users.find { it.login == principal }!!
+    }
+
+    fun updateUserRole(user: User) {
+        val changingUser = users.find { it.login == user.login }!!
+        users.remove(changingUser)
+        users.add(changingUser.copy(role = user.role))
     }
 }

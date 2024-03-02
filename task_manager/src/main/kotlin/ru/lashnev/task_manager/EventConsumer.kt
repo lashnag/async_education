@@ -1,13 +1,50 @@
 package ru.lashnev.task_manager
 
+import com.google.gson.Gson
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.time.Duration
+import java.util.*
 
 @Service
-class EventConsumer {
+class EventConsumer(private val userDao: UserDao) {
 
-    @Scheduled(fixedDelay = 10_000)
+    @Scheduled(initialDelay = 1000, fixedDelay = 1000)
     fun processEvents() {
-        // TODO("Not implemented")
+        val props = Properties()
+        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
+        props[ConsumerConfig.GROUP_ID_CONFIG] = "task_manager"
+        props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
+        props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
+        KafkaConsumer<Any?, Any?>(props).use { consumer ->
+            consumer.subscribe(listOf("CUD", "BE"))
+            while (true) {
+                val records = consumer.poll(Duration.ofSeconds(1))
+                for (record in records) {
+                    when(record.key().toString()) {
+                        "User.Created" -> createUser(record.value().toString())
+                        "User.RoleChanged" -> updateUserRole(record.value().toString())
+                        else -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createUser(event: String) {
+        val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
+        userDao.save(replicationUser.toUser())
+    }
+    private fun updateUserRole(event: String) {
+        val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
+        userDao.updateUserRole(replicationUser.toUser())
+    }
+
+    companion object {
+        val gson = Gson()
     }
 }
