@@ -46,7 +46,7 @@ class DefaultSecurityConfig {
             .username("admin")
             .password("password")
             .passwordEncoder(encoder::encode)
-            .roles(Role.USER.name)
+            .roles(ReplicationRole.USER.name)
             .build()
         return InMemoryUserDetailsManager(user)
     }

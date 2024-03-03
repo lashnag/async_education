@@ -1,10 +1,10 @@
 package ru.lashnev.users
 
-data class User(
+data class ReplicationUser(
     val login: String,
-    val role: Role
+    val role: ReplicationRole
 )
 
-enum class Role {
+enum class ReplicationRole {
     USER, ADMIN, MANAGER, ACCOUNT
 }

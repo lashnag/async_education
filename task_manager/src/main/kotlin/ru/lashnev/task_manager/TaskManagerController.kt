@@ -35,7 +35,7 @@ class TaskManagerController(
         val task = taskDao.getTask(principal, taskUUID)
         return if(task != null) {
             taskDao.closeTask(taskUUID)
-            eventProducer.closeTask(taskUUID)
+            eventProducer.closeTask(task)
             "Closed"
         } else {
             "Cant close"

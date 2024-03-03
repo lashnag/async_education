@@ -10,6 +10,13 @@ data class Task(
     val status: TaskStatus = TaskStatus.OPEN,
 )
 
+data class ReplicationTask(
+    val uuid: UUID,
+    val author: String,
+    val description: String,
+    val assignedUser: String,
+)
+
 enum class TaskStatus {
     OPEN, CLOSED
 }

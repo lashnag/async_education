@@ -15,3 +15,12 @@ fun ReplicationRole.toRole(): Role {
         ReplicationRole.MANAGER -> Role.MANAGER
     }
 }
+
+fun Task.toReplicationTask(): ReplicationTask {
+    return ReplicationTask(
+        this.uuid,
+        this.author,
+        this.description,
+        this.assignedUser,
+    )
+}

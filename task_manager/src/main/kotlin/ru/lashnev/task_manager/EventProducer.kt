@@ -22,13 +22,13 @@ class EventProducer {
                 ProducerRecord(
                     "CUD",
                     "Task.Created",
-                    gson.toJson(task.toString())
+                    gson.toJson(task.toReplicationTask())
                 )
             )
         }
     }
 
-    fun closeTask(taskUUID: UUID) {
+    fun closeTask(task: Task) {
         val props = Properties()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
@@ -39,7 +39,7 @@ class EventProducer {
                 ProducerRecord(
                     "BE",
                     "Task.Closed",
-                    gson.toJson(taskUUID.toString())
+                    gson.toJson(task.toReplicationTask())
                 )
             )
         }

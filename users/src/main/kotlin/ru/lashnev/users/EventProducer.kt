@@ -23,7 +23,7 @@ class EventProducer {
                 ProducerRecord(
                     "CUD",
                     "User.Created",
-                    gson.toJson(user.toUser())
+                    gson.toJson(user.toReplicationUser())
                 )
             )
         }
@@ -40,7 +40,7 @@ class EventProducer {
                 ProducerRecord(
                     "BE",
                     "User.ChangeRole",
-                    gson.toJson(user.toUser())
+                    gson.toJson(user.toReplicationUser())
                 )
             )
         }
