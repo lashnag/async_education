@@ -20,13 +20,13 @@ class EventConsumer(private val userDao: UserDao) {
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         KafkaConsumer<Any?, Any?>(props).use { consumer ->
-            consumer.subscribe(listOf("CUD", "BE"))
+            consumer.subscribe(listOf("UserWorkflow", "UserStreaming"))
             while (true) {
                 val records = consumer.poll(Duration.ofSeconds(1))
                 for (record in records) {
                     when(record.key().toString()) {
-                        "User.Created" -> createUser(record.value().toString())
-                        "User.RoleChanged" -> updateUserRole(record.value().toString())
+                        "UserCreated" -> createUser(record.value().toString())
+                        "UserRoleChanged" -> updateUserRole(record.value().toString())
                         else -> {}
                     }
                 }

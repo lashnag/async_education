@@ -3,18 +3,12 @@ package ru.lashnev.task_manager
 import java.util.UUID
 
 data class Task(
-    val uuid: UUID,
-    val author: String,
+    val id: Int,
+    val publicUid: UUID,
+    val authorPublicUid: String,
     val description: String,
-    val assignedUser: String,
+    val assignedUserPublicUid: String,
     val status: TaskStatus = TaskStatus.OPEN,
-)
-
-data class ReplicationTask(
-    val uuid: UUID,
-    val author: String,
-    val description: String,
-    val assignedUser: String,
 )
 
 enum class TaskStatus {
@@ -22,13 +16,28 @@ enum class TaskStatus {
 }
 
 data class User(
-    val login: String,
+    val publicUid: String,
     val role: Role,
 )
 
 enum class Role {
     ADMIN, MANAGER, OTHER
 }
+
+data class ReplicationTask(
+    val taskPublicUid: UUID,
+    val authorPublicUid: String,
+    val description: String,
+)
+
+data class ReplicationClosedTask(
+    val taskPublicUid: UUID,
+)
+
+data class ReplicationAssignedTask(
+    val taskPublicUid: UUID,
+    val assignedUserPublicUid: String,
+)
 
 data class ReplicationUser(
     val login: String,

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import kotlin.random.Random
 
 @RestController
 class TaskManagerController(
@@ -19,22 +20,23 @@ class TaskManagerController(
     }
 
     @PutMapping("task_manager/create_task")
-    fun createNewTask(principal: String, taskDescription: String): String {
+    fun createNewTask(userPublicUid: String, taskDescription: String): String {
         val assignedUser = userDao
             .getAllUsers()
             .filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
             .random()
-        val task = Task(UUID.randomUUID(), principal, taskDescription, assignedUser.login)
+        val task = Task(Random.nextInt(), UUID.randomUUID(), userPublicUid, taskDescription, assignedUser.publicUid)
         taskDao.save(task)
         eventProducer.addTask(task)
+        eventProducer.taskAssigned(task)
         return "Created"
     }
 
     @PostMapping("task_manager/close_task")
-    fun closeTask(principal: String, taskUUID: UUID): String {
-        val task = taskDao.getTask(principal, taskUUID)
+    fun closeTask(userPublicUid: String, taskPublicUid: UUID): String {
+        val task = taskDao.getTask(userPublicUid, taskPublicUid)
         return if(task != null) {
-            taskDao.closeTask(taskUUID)
+            taskDao.closeTask(taskPublicUid)
             eventProducer.closeTask(task)
             "Closed"
         } else {
@@ -43,15 +45,15 @@ class TaskManagerController(
     }
 
     @PostMapping("task_manager/reassign")
-    fun reassignOpenTasks(principal: String): String {
-        val user = userDao.getUser(principal)
+    fun reassignOpenTasks(userPublicUid: String): String {
+        val user = userDao.getUser(userPublicUid)
         if(user.role != Role.MANAGER && user.role != Role.ADMIN) {
             return "Permission denied"
         }
         val usersToAssign = userDao.getAllUsers().filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
         val openTasks = taskDao.getOpenTasks()
         openTasks.forEach {
-            taskDao.reassign(it, usersToAssign.random().login)
+            taskDao.reassign(it, usersToAssign.random().publicUid)
         }
         return "Reassigned"
     }

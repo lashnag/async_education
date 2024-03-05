@@ -20,9 +20,26 @@ class EventProducer {
         KafkaProducer<Any?, Any?>(props).use { producer ->
             producer.send(
                 ProducerRecord(
-                    "CUD",
-                    "Task.Created",
+                    "TaskStreaming",
+                    "TaskCreated",
                     gson.toJson(task.toReplicationTask())
+                )
+            )
+        }
+    }
+
+    fun taskAssigned(task: Task) {
+        val props = Properties()
+        props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
+        props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
+        props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
+
+        KafkaProducer<Any?, Any?>(props).use { producer ->
+            producer.send(
+                ProducerRecord(
+                    "TaskWorkflow",
+                    "TaskCreated",
+                    gson.toJson(task.toReplicationAssignedTask())
                 )
             )
         }
@@ -37,9 +54,9 @@ class EventProducer {
         KafkaProducer<Any?, Any?>(props).use { producer ->
             producer.send(
                 ProducerRecord(
-                    "BE",
-                    "Task.Closed",
-                    gson.toJson(task.toReplicationTask())
+                    "TaskWorkflow",
+                    "TaskClosed",
+                    gson.toJson(task.toReplicationClosedTask())
                 )
             )
         }

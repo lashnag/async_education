@@ -21,8 +21,8 @@ class EventProducer {
         KafkaProducer<Any?, Any?>(props).use { producer ->
             producer.send(
                 ProducerRecord(
-                    "CUD",
-                    "User.Created",
+                    "UserStreaming",
+                    "UserCreated",
                     gson.toJson(user.toReplicationUser())
                 )
             )
@@ -38,8 +38,8 @@ class EventProducer {
         KafkaProducer<Any?, Any?>(props).use { producer ->
             producer.send(
                 ProducerRecord(
-                    "BE",
-                    "User.ChangeRole",
+                    "UserWorkflow",
+                    "UserRoleChanged",
                     gson.toJson(user.toReplicationUser())
                 )
             )

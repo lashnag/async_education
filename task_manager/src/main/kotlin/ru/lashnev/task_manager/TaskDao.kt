@@ -2,12 +2,13 @@ package ru.lashnev.task_manager
 
 import org.springframework.stereotype.Repository
 import java.util.UUID
+import kotlin.random.Random
 
 @Repository
 class TaskDao {
     private val tasks: MutableSet<Task> = mutableSetOf(
-        Task(UUID.randomUUID(), "someUser1", "TestTask", "someUser2", TaskStatus.OPEN),
-        Task(UUID.randomUUID(), "someUser1", "TestTask2", "admin", TaskStatus.OPEN),
+        Task(Random.nextInt(), UUID.randomUUID(), "someUser1", "TestTask", "someUser2", TaskStatus.OPEN),
+        Task(Random.nextInt(), UUID.randomUUID(), "someUser1", "TestTask2", "admin", TaskStatus.OPEN),
     )
 
     fun save(task: Task) {
@@ -15,15 +16,15 @@ class TaskDao {
     }
 
     fun getUserTasks(user: String): Set<Task> {
-        return tasks.filter { it.assignedUser == user }.toSet()
+        return tasks.filter { it.assignedUserPublicUid == user }.toSet()
     }
 
     fun getTask(user: String, taskUUID: UUID): Task? {
-        return tasks.find { it.assignedUser == user && it.uuid == taskUUID }
+        return tasks.find { it.assignedUserPublicUid == user && it.publicUid == taskUUID }
     }
 
     fun closeTask(taskUUID: UUID) {
-        val taskToClose = tasks.find { it.uuid == taskUUID }
+        val taskToClose = tasks.find { it.publicUid == taskUUID }
         tasks.remove(taskToClose)
         taskToClose?.copy(status = TaskStatus.CLOSED)?.let { tasks.add(it) }
     }
@@ -33,8 +34,8 @@ class TaskDao {
     }
 
     fun reassign(task: Task, principal: String) {
-        val taskToReassign = tasks.find { it.uuid == task.uuid }!!
-        tasks.remove(task)
-        tasks.add(task.copy(assignedUser = principal))
+        val taskToReassign = tasks.find { it.publicUid == task.publicUid }!!
+        tasks.remove(taskToReassign)
+        tasks.add(task.copy(assignedUserPublicUid = principal))
     }
 }

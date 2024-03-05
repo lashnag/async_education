@@ -2,7 +2,7 @@ package ru.lashnev.task_manager
 
 fun ReplicationUser.toUser(): User {
     return User(
-        login = this.login,
+        publicUid = this.login,
         role = this.role.toRole(),
     )
 }
@@ -18,9 +18,16 @@ fun ReplicationRole.toRole(): Role {
 
 fun Task.toReplicationTask(): ReplicationTask {
     return ReplicationTask(
-        this.uuid,
-        this.author,
+        this.publicUid,
+        this.authorPublicUid,
         this.description,
-        this.assignedUser,
     )
+}
+
+fun Task.toReplicationAssignedTask(): ReplicationAssignedTask {
+    return ReplicationAssignedTask(this.publicUid, this.assignedUserPublicUid)
+}
+
+fun Task.toReplicationClosedTask(): ReplicationClosedTask {
+    return ReplicationClosedTask(this.publicUid)
 }
