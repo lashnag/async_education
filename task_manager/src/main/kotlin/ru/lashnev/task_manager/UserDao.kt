@@ -18,8 +18,8 @@ class UserDao {
         return users
     }
 
-    fun getUser(principal: String): User {
-        return users.find { it.publicUid == principal }!!
+    fun getUser(userPublicId: String): User {
+        return users.find { it.publicUid == userPublicId }!!
     }
 
     fun updateUserRole(user: User) {

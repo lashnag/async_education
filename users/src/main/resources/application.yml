@@ -10,7 +10,7 @@ spring:
           task-manager-client:
             registration:
               client-id: task-manager-client
-              client-secret: "{noop}secret"
+              client-secret: "{noop}secret-task-manager"
               client-name: Task Manager Client
               client-authentication-methods:
                 - client_secret_basic
@@ -23,6 +23,38 @@ spring:
               scopes:
                 - openid
                 - task-manager
+          accounting-client:
+            registration:
+              client-id: accounting-client
+              client-secret: "{noop}secret-accounting"
+              client-name: Accounting Client
+              client-authentication-methods:
+                - client_secret_basic
+              authorization-grant-types:
+                - authorization_code
+                - refresh_token
+              redirect-uris:
+                - http://127.0.0.1:8080/login/oauth2/code/accounting-client-oidc
+                - http://127.0.0.1:8080/authorized
+              scopes:
+                - openid
+                - accounting
+          analytics-client:
+            registration:
+              client-id: analytics-client
+              client-secret: "{noop}secret-analytics"
+              client-name: Analytics Client
+              client-authentication-methods:
+                - client_secret_basic
+              authorization-grant-types:
+                - authorization_code
+                - refresh_token
+              redirect-uris:
+                - http://127.0.0.1:8080/login/oauth2/code/analytics-client-oidc
+                - http://127.0.0.1:8080/authorized
+              scopes:
+                - openid
+                - analytics
 
 logging:
   level:

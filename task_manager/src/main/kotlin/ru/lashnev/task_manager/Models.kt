@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class Task(
     val id: Int,
-    val publicUid: UUID,
+    val taskPublicUid: UUID,
     val authorPublicUid: String,
     val description: String,
     val assignedUserPublicUid: String,
@@ -24,26 +24,37 @@ enum class Role {
     ADMIN, MANAGER, OTHER
 }
 
-data class ReplicationTask(
-    val taskPublicUid: UUID,
+data class ReplicationCreateTask(
+    val taskPublicUid: String,
     val authorPublicUid: String,
     val description: String,
+    val metaData: ReplicationMetaData,
 )
 
 data class ReplicationClosedTask(
-    val taskPublicUid: UUID,
+    val taskPublicUid: String,
+    val metaData: ReplicationMetaData,
 )
 
 data class ReplicationAssignedTask(
-    val taskPublicUid: UUID,
+    val taskPublicUid: String,
     val assignedUserPublicUid: String,
+    val metaData: ReplicationMetaData,
 )
 
 data class ReplicationUser(
-    val login: String,
-    val role: ReplicationRole
+    val publicUserUid: String,
+    val role: ReplicationRole,
+    val metaData: ReplicationMetaData,
 )
 
 enum class ReplicationRole {
     USER, ADMIN, MANAGER, ACCOUNT
 }
+
+data class ReplicationMetaData(
+    val eventVersion: String,
+    val eventId: String,
+    val eventTime: String,
+    val producer: String,
+)

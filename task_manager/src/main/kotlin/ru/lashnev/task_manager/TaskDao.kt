@@ -20,11 +20,11 @@ class TaskDao {
     }
 
     fun getTask(user: String, taskUUID: UUID): Task? {
-        return tasks.find { it.assignedUserPublicUid == user && it.publicUid == taskUUID }
+        return tasks.find { it.assignedUserPublicUid == user && it.taskPublicUid == taskUUID }
     }
 
     fun closeTask(taskUUID: UUID) {
-        val taskToClose = tasks.find { it.publicUid == taskUUID }
+        val taskToClose = tasks.find { it.taskPublicUid == taskUUID }
         tasks.remove(taskToClose)
         taskToClose?.copy(status = TaskStatus.CLOSED)?.let { tasks.add(it) }
     }
@@ -34,7 +34,7 @@ class TaskDao {
     }
 
     fun reassign(task: Task, principal: String) {
-        val taskToReassign = tasks.find { it.publicUid == task.publicUid }!!
+        val taskToReassign = tasks.find { it.taskPublicUid == task.taskPublicUid }!!
         tasks.remove(taskToReassign)
         tasks.add(task.copy(assignedUserPublicUid = principal))
     }

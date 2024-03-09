@@ -15,8 +15,8 @@ class TaskManagerController(
 ) {
 
     @GetMapping("/task_manager/list")
-    fun getTasks(principal: String): Set<Task> {
-        return taskDao.getUserTasks(principal)
+    fun getTasks(userPublicUid: String): Set<Task> {
+        return taskDao.getUserTasks(userPublicUid)
     }
 
     @PutMapping("task_manager/create_task")

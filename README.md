@@ -5,3 +5,5 @@
 - Запуск приложения users
 - Запуск приложения task_manager
 - Запуск приложения api_client
+- Запуск приложения accounting
+- Запуск приложения analytics
