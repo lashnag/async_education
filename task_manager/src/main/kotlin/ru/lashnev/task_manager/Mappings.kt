@@ -1,8 +1,11 @@
 package ru.lashnev.task_manager
 
+import java.util.Date
+import java.util.UUID
+
 fun ReplicationUser.toUser(): User {
     return User(
-        publicUid = this.login,
+        publicUid = this.publicUserUid,
         role = this.role.toRole(),
     )
 }
@@ -16,18 +19,41 @@ fun ReplicationRole.toRole(): Role {
     }
 }
 
-fun Task.toReplicationTask(): ReplicationTask {
-    return ReplicationTask(
-        this.publicUid,
-        this.authorPublicUid,
-        this.description,
+fun Task.toReplicationTask(eventVersion: String, producer: String): ReplicationCreateTask {
+    return ReplicationCreateTask(
+        taskPublicUid = this.taskPublicUid.toString(),
+        authorPublicUid = this.authorPublicUid,
+        title = this.description,
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = eventVersion,
+            producer = producer,
+        )
     )
 }
 
-fun Task.toReplicationAssignedTask(): ReplicationAssignedTask {
-    return ReplicationAssignedTask(this.publicUid, this.assignedUserPublicUid)
+fun Task.toReplicationAssignedTask(eventVersion: String, producer: String): ReplicationAssignedTask {
+    return ReplicationAssignedTask(
+        taskPublicUid = this.taskPublicUid.toString(),
+        assignedUserPublicUid = this.assignedUserPublicUid,
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = eventVersion,
+            producer = producer,
+        )
+    )
 }
 
-fun Task.toReplicationClosedTask(): ReplicationClosedTask {
-    return ReplicationClosedTask(this.publicUid)
+fun Task.toReplicationClosedTask(eventVersion: String, producer: String): ReplicationClosedTask {
+    return ReplicationClosedTask(
+        taskPublicUid = this.taskPublicUid.toString(),
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = eventVersion,
+            producer = producer,
+        )
+    )
 }

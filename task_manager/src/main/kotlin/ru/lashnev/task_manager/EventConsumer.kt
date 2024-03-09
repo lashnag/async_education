@@ -10,7 +10,7 @@ import java.time.Duration
 import java.util.*
 
 @Service
-class EventConsumer(private val userDao: UserDao) {
+class EventConsumer(private val userDao: UserDao, private val eventProducer: EventProducer) {
 
     @Scheduled(initialDelay = 1000, fixedDelay = 1000)
     fun processEvents() {
@@ -20,14 +20,17 @@ class EventConsumer(private val userDao: UserDao) {
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         KafkaConsumer<Any?, Any?>(props).use { consumer ->
-            consumer.subscribe(listOf("UserWorkflow", "UserStreaming"))
+            consumer.subscribe(listOf("UserStreaming"))
             while (true) {
                 val records = consumer.poll(Duration.ofSeconds(1))
                 for (record in records) {
-                    when(record.key().toString()) {
-                        "UserCreated" -> createUser(record.value().toString())
-                        "UserRoleChanged" -> updateUserRole(record.value().toString())
-                        else -> {}
+                    try {
+                        when (record.key().toString()) {
+                            "UserCreated" -> createUser(record.value().toString())
+                            "UserRoleChanged" -> updateUserRole(record.value().toString())
+                        }
+                    } catch (exception: ReplicationBrokenException) {
+                        eventProducer.addEvent("BrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
                     }
                 }
             }
@@ -35,12 +38,20 @@ class EventConsumer(private val userDao: UserDao) {
     }
 
     private fun createUser(event: String) {
-        val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
-        userDao.save(replicationUser.toUser())
+        try {
+            val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
+            userDao.save(replicationUser.toUser())
+        } catch (exception: RuntimeException) {
+            throw ReplicationBrokenException()
+        }
     }
     private fun updateUserRole(event: String) {
-        val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
-        userDao.updateUserRole(replicationUser.toUser())
+        try {
+            val replicationUser = gson.fromJson(event, ReplicationUser::class.java)
+            userDao.updateUserRole(replicationUser.toUser())
+        } catch (exception: RuntimeException) {
+            throw ReplicationBrokenException()
+        }
     }
 
     companion object {

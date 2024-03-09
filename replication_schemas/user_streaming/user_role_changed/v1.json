@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "login": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["USER", "ADMIN", "MANAGER", "ACCOUNT"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "eventVersion": { "type": "string" },
+        "eventId": { "type": "string" },
+        "eventTime": { "type": "string" },
+        "producer": { "type": "string" }
+      },
+      "required": ["eventVersion", "eventId", "eventTime", "producer"]
+    }
+  },
+  "required": ["login", "role", "metadata"]
+}

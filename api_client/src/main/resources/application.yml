@@ -9,7 +9,7 @@ spring:
           task-manager-client-oidc:
             provider: spring
             client-id: task-manager-client
-            client-secret: secret
+            client-secret: secret-task-manager
             authorization-grant-type: authorization_code
             redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
             scope: openid
@@ -17,11 +17,43 @@ spring:
           task-manager-client-authorization-code:
             provider: spring
             client-id: task-manager-client
-            client-secret: secret
+            client-secret: secret-task-manager
             authorization-grant-type: authorization_code
             redirect-uri: "http://127.0.0.1:8080/authorized"
             scope: task-manager
             client-name: task-manager-client-authorization-code
+          accounting-client-oidc:
+            provider: spring
+            client-id: accounting-client
+            client-secret: secret-accounting
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: accounting-client-oidc
+          accounting-client-authorization-code:
+            provider: spring
+            client-id: accounting-client
+            client-secret: secret-accounting
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: accounting
+            client-name: accounting-client-authorization-code
+          analytics-client-oidc:
+            provider: spring
+            client-id: analytics-client
+            client-secret: secret-analytics
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: analytics-client-oidc
+          analytics-client-authorization-code:
+            provider: spring
+            client-id: analytics-client
+            client-secret: secret-analytics
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:8080/authorized"
+            scope: analytics
+            client-name: analytics-client-authorization-code
         provider:
           spring:
             issuer-uri: http://auth-server:9001

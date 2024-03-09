@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "accountPublicUid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "userPublicUId": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "eventVersion": { "type": "string" },
+        "eventId": { "type": "string" },
+        "eventTime": { "type": "string" },
+        "producer": { "type": "string" }
+      },
+      "required": ["eventVersion", "eventId", "eventTime", "producer"]
+    }
+  },
+  "required": ["accountPublicUidId", "userPublicUId", "metadata"]
+}

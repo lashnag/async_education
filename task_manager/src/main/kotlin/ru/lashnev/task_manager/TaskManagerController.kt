@@ -15,17 +15,17 @@ class TaskManagerController(
 ) {
 
     @GetMapping("/task_manager/list")
-    fun getTasks(principal: String): Set<Task> {
-        return taskDao.getUserTasks(principal)
+    fun getTasks(userPublicUid: String): Set<Task> {
+        return taskDao.getUserTasks(userPublicUid)
     }
 
     @PutMapping("task_manager/create_task")
-    fun createNewTask(userPublicUid: String, taskDescription: String): String {
+    fun createNewTask(userPublicUid: String, taskDescription: String, taskTitle: String): String {
         val assignedUser = userDao
             .getAllUsers()
             .filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
             .random()
-        val task = Task(Random.nextInt(), UUID.randomUUID(), userPublicUid, taskDescription, assignedUser.publicUid)
+        val task = Task(Random.nextInt(), UUID.randomUUID(), userPublicUid, taskDescription, assignedUser.publicUid, taskTitle)
         taskDao.save(task)
         eventProducer.addTask(task)
         eventProducer.taskAssigned(task)

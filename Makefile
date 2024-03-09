@@ -1,5 +1,5 @@
-run-docker:
+run-kafka:
 	docker-compose up -d
 
-stop-docker:
+stop-kafka:
 	docker-compose down

@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "taskPublicUid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "assignedUserPublicUid": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "eventVersion": { "type": "string" },
+        "eventId": { "type": "string" },
+        "eventTime": { "type": "string" },
+        "producer": { "type": "string" }
+      },
+      "required": ["eventVersion", "eventId", "eventTime", "producer"]
+    }
+  },
+  "required": ["taskPublicUid", "assignedUserPublicUid", "metadata"]
+}
