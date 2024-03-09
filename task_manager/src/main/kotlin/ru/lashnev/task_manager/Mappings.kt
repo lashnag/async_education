@@ -23,6 +23,7 @@ fun Task.toReplicationTask(eventVersion: String, producer: String): ReplicationC
     return ReplicationCreateTask(
         taskPublicUid = this.taskPublicUid.toString(),
         authorPublicUid = this.authorPublicUid,
+        jiraId = jiraId,
         title = this.description,
         metaData = ReplicationMetaData(
             eventId = UUID.randomUUID().toString(),

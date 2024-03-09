@@ -45,6 +45,7 @@ data class ReplicationCreateTask(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
+    val jiraId: String? = null,
     val metaData: ReplicationMetaData,
 )
 

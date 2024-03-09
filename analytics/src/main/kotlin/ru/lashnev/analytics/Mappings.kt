@@ -19,9 +19,14 @@ fun ReplicationRole.toRole(): Role {
 }
 
 fun ReplicationCreateTask.toTask(): Task {
+    val concatTitle = if(this.jiraId != null) {
+        "[${this.jiraId}] + ${this.title}"
+    } else {
+        this.title
+    }
     return Task(
         taskPublicUid = this.taskPublicUid,
-        title = title,
+        title = concatTitle,
         creationDate = LocalDateTime.parse(metaData.eventTime),
     )
 }

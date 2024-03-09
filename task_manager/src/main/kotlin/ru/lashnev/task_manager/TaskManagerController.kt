@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RestController
+import java.lang.IllegalStateException
 import java.util.UUID
 import kotlin.random.Random
 
@@ -20,12 +21,24 @@ class TaskManagerController(
     }
 
     @PutMapping("task_manager/create_task")
-    fun createNewTask(userPublicUid: String, taskDescription: String, taskTitle: String): String {
+    fun createNewTask(userPublicUid: String, taskDescription: String, taskTitle: String, jiraId: String): String {
+        if(taskTitle.contains("[") || taskTitle.contains("]")) {
+            throw IllegalStateException("No jira ticket in taskTitle")
+        }
+
         val assignedUser = userDao
             .getAllUsers()
             .filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
             .random()
-        val task = Task(Random.nextInt(), UUID.randomUUID(), userPublicUid, taskDescription, assignedUser.publicUid, taskTitle)
+        val task = Task(
+            Random.nextInt(),
+            UUID.randomUUID(),
+            userPublicUid,
+            taskDescription,
+            assignedUser.publicUid,
+            taskTitle,
+            jiraId
+        )
         taskDao.save(task)
         eventProducer.addTask(task)
         eventProducer.taskAssigned(task)

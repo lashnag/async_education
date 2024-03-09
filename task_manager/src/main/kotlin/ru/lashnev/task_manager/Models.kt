@@ -7,6 +7,7 @@ data class Task(
     val taskPublicUid: UUID,
     val authorPublicUid: String,
     val title: String,
+    val jiraId: String?,
     val description: String,
     val assignedUserPublicUid: String,
     val status: TaskStatus = TaskStatus.OPEN,
@@ -29,6 +30,7 @@ data class ReplicationCreateTask(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
+    val jiraId: String?,
     val metaData: ReplicationMetaData,
 )
 
