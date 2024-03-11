@@ -22,7 +22,7 @@ class EventConsumer(
     fun processEvents() {
         val props = Properties()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
-        props[ConsumerConfig.GROUP_ID_CONFIG] = "task_manager"
+        props[ConsumerConfig.GROUP_ID_CONFIG] = "accounting"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         KafkaConsumer<Any?, Any?>(props).use { consumer ->
