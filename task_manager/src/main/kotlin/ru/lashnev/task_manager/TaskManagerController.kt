@@ -36,7 +36,8 @@ class TaskManagerController(
             authorPublicUid = userPublicUid,
             description = taskDescription,
             assignedUserPublicUid = assignedUser.publicUid,
-            title = taskTitle
+            title = taskTitle,
+            jiraId = jiraId,
         )
 
         taskDao.save(task)
