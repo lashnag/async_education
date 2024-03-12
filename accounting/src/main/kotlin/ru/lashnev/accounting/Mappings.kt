@@ -74,3 +74,18 @@ fun Task.toReplicationTaskDonePriceCalculated(eventVersion: String, producer: St
         ),
     )
 }
+
+fun Operation.toReplicationOperation(accountPublicUId: String, eventVersion: String, producer: String): ReplicationOperation {
+    return ReplicationOperation(
+        accountPublicUid = accountPublicUId,
+        description = this.description,
+        changeAmount = this.changeAmount,
+        dateTime = this.dateTime.toString(),
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = eventVersion,
+            producer = producer,
+        ),
+    )
+}

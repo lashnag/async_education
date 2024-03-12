@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -91,21 +92,23 @@ class EventConsumer(
             val task = taskDao.getTask(assignedTask.taskPublicUid)
             if (task.taskStatus == TaskStatus.ASSIGNED) {
                 val previousAssignedAccount = accountDao.getUserAccount(task.assignedUserPublicUid!!)
-                accountDao.addOperation(
-                    account = previousAssignedAccount,
-                    amount = -task.assignedPrice!!,
-                    description = "Task reassign ${task.title}"
+                val operation = Operation(
+                    changeAmount = previousAssignedAccount.balance,
+                    dateTime = LocalDateTime.now(),
+                    description = "Task closed ${task.title}"
                 )
-                eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
+                accountDao.addOperation(previousAssignedAccount.id, operation)
+                eventProducer.operationCreated(operation, previousAssignedAccount)
             }
             val randomAssignedPrice = (10..20).shuffled().first().toLong()
             val currentUserAccount = accountDao.getUserAccount(task.assignedUserPublicUid!!)
-            accountDao.addOperation(
-                account = currentUserAccount,
-                amount = randomAssignedPrice,
-                description = "Task assigned ${task.title}"
+            val operation = Operation(
+                changeAmount = currentUserAccount.balance,
+                dateTime = LocalDateTime.now(),
+                description = "Task closed ${task.title}"
             )
-            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
+            accountDao.addOperation(currentUserAccount.id, operation)
+            eventProducer.operationCreated(operation, currentUserAccount)
             val randomDonePrice = (20..40).shuffled().first().toLong()
             taskDao.assignTask(
                 taskPublicUId = assignedTask.taskPublicUid,
@@ -125,12 +128,13 @@ class EventConsumer(
             val closedTask = gson.fromJson(event, ReplicationClosedTask::class.java)
             val task = taskDao.getTask(closedTask.taskPublicUid)
             val currentUserAccount = accountDao.getUserAccount(task.assignedUserPublicUid!!)
-            accountDao.addOperation(
-                account = currentUserAccount,
-                amount = task.donePrice!!,
+            val operation = Operation(
+                changeAmount = currentUserAccount.balance,
+                dateTime = LocalDateTime.now(),
                 description = "Task closed ${task.title}"
             )
-            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
+            accountDao.addOperation(currentUserAccount.id, operation)
+            eventProducer.operationCreated(operation, currentUserAccount)
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }

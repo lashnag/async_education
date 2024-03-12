@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import java.lang.IllegalStateException
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @RestController
 class AccountingController(
@@ -51,9 +52,15 @@ class AccountingController(
         val allAccounts = accountDao.getAccounts()
         allAccounts.forEach {
             if(it.balance > 0) {
+                val operation = Operation(
+                    changeAmount = -it.balance,
+                    dateTime = LocalDateTime.now(),
+                    description = "Salary payout"
+                )
+
                 bankService.payout(it.accountPublicUid, it.balance)
                 messageService.notifyPayment(it.userPublicId)
-                accountDao.addOperation(it, -it.balance, "Salary payout")
+                accountDao.addOperation(it.id, operation)
             }
         }
     }
