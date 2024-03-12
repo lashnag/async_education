@@ -108,3 +108,11 @@ data class ReplicationJiraIdAddedToTask(
     val jiraId: String,
     val metaData: ReplicationMetaData,
 )
+
+data class ReplicationOperation(
+    val accountPublicUid: String,
+    val description: String,
+    val dateTime: String,
+    val changeAmount: Long,
+    val metaData: ReplicationMetaData,
+)

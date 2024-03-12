@@ -15,6 +15,13 @@ data class Account(
     val accountPublicUid: String,
     val userPublicId: String,
     val balance: Long,
+    val operations: MutableList<Operation>
+)
+
+data class Operation(
+    val description: String,
+    val dateTime: LocalDateTime,
+    val changeAmount: Long,
 )
 
 data class Task(
@@ -92,5 +99,13 @@ data class ReplicationAccountBalanceChanged(
 data class ReplicationJiraIdAddedToTask(
     val taskPublicUid: String,
     val jiraId: String,
+    val metaData: ReplicationMetaData,
+)
+
+data class ReplicationOperationCreated(
+    val accountPublicUid: String,
+    val description: String,
+    val dateTime: String,
+    val changeAmount: Long,
     val metaData: ReplicationMetaData,
 )

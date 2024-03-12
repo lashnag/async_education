@@ -40,24 +40,34 @@ class EventProducer {
         } catch (exception: ReplicationBrokenException) {
             addEvent(
                 "AccountingProducerBrokenAccountStreaming", "AccountCreated", gson.toJson(
-                    account.toReplicationAccountCreated(eventVersion = "V1", producer = "task_manager")
+                    account.toReplicationAccountCreated(eventVersion = "V1", producer = "accounting")
                 )
             )
         }
     }
 
-    fun accountBalanceChanged(account: Account) {
+    fun operationCreated(operation: Operation, account: Account) {
         try {
             addEvent(
-                "AccountStreaming", "AccountBalanceChanged", checkSchema(
-                    gson.toJson(account.toReplicationAccountBalanceChanged(eventVersion = "V1", producer = "task_manager")),
+                "AccountStreaming", "OperationCreated", checkSchema(
+                    gson.toJson(
+                        operation.toReplicationOperation(
+                            accountPublicUId = account.accountPublicUid.toString(),
+                            eventVersion = "V1",
+                            producer = "accounting"
+                        )
+                    ),
                     accountChangedV1
                 )
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "AccountingProducerBrokenAccountStreaming", "AccountBalanceChanged", gson.toJson(
-                    account.toReplicationAccountBalanceChanged(eventVersion = "V1", producer = "task_manager")
+                "AccountingProducerBrokenAccountStreaming", "OperationCreated", gson.toJson(
+                    operation.toReplicationOperation(
+                        accountPublicUId = account.accountPublicUid.toString(),
+                        eventVersion = "V1",
+                        producer = "accounting"
+                    )
                 )
             )
         }
@@ -68,14 +78,14 @@ class EventProducer {
             addEvent(
                 "AccountStreaming", "DonePriceCalculated", checkSchema(
                     gson.toJson(
-                        task.toReplicationTaskDonePriceCalculated(eventVersion = "V1", producer = "task_manager")
+                        task.toReplicationTaskDonePriceCalculated(eventVersion = "V1", producer = "accounting")
                     ), donePriceCalculatedV1
                 )
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
                 "AccountingProducerBrokenAccountStreaming", "DonePriceCalculated", gson.toJson(
-                    task.toReplicationTaskDonePriceCalculated(eventVersion = "V1", producer = "task_manager")
+                    task.toReplicationTaskDonePriceCalculated(eventVersion = "V1", producer = "accounting")
                 )
             )
         }

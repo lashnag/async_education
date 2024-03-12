@@ -38,6 +38,7 @@ class EventConsumer(
                             "AccountCreated" -> accountCreated(record.value().toString())
                             "AccountBalanceChanged" -> accountBalanceChanged(record.value().toString())
                             "TaskJiraIdAdded" -> jiraIdAddedToTask(record.value().toString())
+                            "OperationCreated" -> operationCreated(record.value().toString())
                         }
                     } catch (exception: ReplicationBrokenException) {
                         eventProducer.addEvent("AnalyticsBrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
@@ -114,6 +115,15 @@ class EventConsumer(
         try {
             val jiraIdAdded = gson.fromJson(event, ReplicationJiraIdAddedToTask::class.java)
             taskDao.updateJiraId(jiraIdAdded.taskPublicUid, jiraIdAdded.jiraId)
+        } catch (exception: RuntimeException) {
+            throw ReplicationBrokenException()
+        }
+    }
+
+    private fun operationCreated(event: String) {
+        try {
+            val operationCreated = gson.fromJson(event, ReplicationOperationCreated::class.java)
+            accountDao.addOperation(operationCreated.accountPublicUid, operationCreated.toOperation())
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }

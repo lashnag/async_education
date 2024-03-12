@@ -41,5 +41,14 @@ fun ReplicationAccountCreated.toAccount(): Account {
         accountPublicUid = this.accountPublicUid,
         balance = 0,
         userPublicId = this.userPublicUId,
+        operations = mutableListOf(),
+    )
+}
+
+fun ReplicationOperationCreated.toOperation(): Operation {
+    return Operation(
+        changeAmount = this.changeAmount,
+        dateTime = LocalDateTime.parse(this.dateTime),
+        description = this.description,
     )
 }

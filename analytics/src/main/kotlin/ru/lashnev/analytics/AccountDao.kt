@@ -20,4 +20,9 @@ class AccountDao {
         accounts.remove(updateAccount)
         accounts.add(updateAccount.copy(balance = currentBalance))
     }
+
+    fun addOperation(accountPublicUid: String, operation: Operation) {
+        val updateAccount = accounts.find { it.accountPublicUid == accountPublicUid }!!
+        updateAccount.operations.add(operation)
+    }
 }

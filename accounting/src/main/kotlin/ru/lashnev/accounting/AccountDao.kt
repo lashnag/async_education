@@ -28,17 +28,11 @@ class AccountDao {
         return accounts
     }
 
-    fun addOperation(account: Account, amount: Long, description: String) {
-        val changedAccount = accounts.find { it.id == account.id }!!
+    fun addOperation(account: String, operation: Operation) {
+        val changedAccount = accounts.find { it.id == account }!!
         accounts.remove(changedAccount)
-        changedAccount.operations.add(
-            Operation(
-                changeAmount = amount,
-                dateTime = LocalDateTime.now(),
-                description = description
-            )
-        )
-        accounts.add(changedAccount.copy(balance = changedAccount.balance + amount))
+        changedAccount.operations.add(operation)
+        accounts.add(changedAccount.copy(balance = changedAccount.balance + operation.changeAmount))
     }
 
 }

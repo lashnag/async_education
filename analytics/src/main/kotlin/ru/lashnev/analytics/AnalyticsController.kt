@@ -19,7 +19,7 @@ class AnalyticsController(
             throw IllegalStateException("Forbidden")
         }
 
-        val currentBalance = accountDao.getAccounts().sumOf { it.balance }
+        val currentBalance = accountDao.getAccounts().map { it.operations.sumOf { it.changeAmount } }.sumOf { it }
         return "Current balance: $currentBalance"
     }
 
