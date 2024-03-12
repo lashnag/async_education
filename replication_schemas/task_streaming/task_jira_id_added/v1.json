@@ -5,16 +5,6 @@
       "type": "string",
       "format": "uuid"
     },
-    "assignedUserPublicUid": {
-      "type": "string"
-    },
-    "title": {
-      "type": "string"
-    },
-    "creationTime": {
-      "type": "string",
-      "format": "date-time"
-    },
     "jiraId": {
       "type": "string"
     },
@@ -26,8 +16,8 @@
         "eventTime": { "type": "string" },
         "producer": { "type": "string" }
       },
-      "required": ["eventVersion", "eventId", "eventTime", "producer"]
+      "required": ["eventVersion", "eventId", "eventTime", "producer", "jiraId"]
     }
   },
-  "required": ["taskPublicUid", "assignedUserPublicUid", "jiraId", "creationTime", "metadata"]
+  "required": ["taskPublicUid", "jiraId", "metadata"]
 }

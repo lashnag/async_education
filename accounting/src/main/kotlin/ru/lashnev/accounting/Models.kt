@@ -32,7 +32,8 @@ data class Task(
     val assignedUserPublicUid: String? = null,
     val assignedPrice: Long? = null,
     val donePrice: Long? = null,
-    val taskStatus: TaskStatus
+    val taskStatus: TaskStatus,
+    val jiraId: String?,
 )
 
 enum class TaskStatus {
@@ -56,10 +57,19 @@ data class ReplicationMetaData(
     val producer: String,
 )
 
-data class ReplicationCreateTask(
+data class ReplicationCreateTaskV1(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
+    val creationTime: String,
+    val metaData: ReplicationMetaData,
+)
+
+data class ReplicationCreateTaskV2(
+    val taskPublicUid: String,
+    val authorPublicUid: String,
+    val title: String,
+    val jiraId: String,
     val creationTime: String,
     val metaData: ReplicationMetaData,
 )
@@ -90,5 +100,11 @@ data class ReplicationAccountBalanceChanged(
 data class ReplicationTaskDonePriceCalculated(
     val taskPublicUid: String,
     val price: Long,
+    val metaData: ReplicationMetaData,
+)
+
+data class ReplicationJiraIdAddedToTask(
+    val taskPublicUid: String,
+    val jiraId: String,
     val metaData: ReplicationMetaData,
 )

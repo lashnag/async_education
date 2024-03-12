@@ -16,7 +16,7 @@ import java.util.*
 @Service
 class EventProducer {
 
-    @Value("file:./../../../../../../../replication_schemas/task_streaming/task_created/v1.json")
+    @Value("file:./../../../../../../../replication_schemas/task_streaming/task_created/v2.json")
     private lateinit var taskCreatedV1: Resource
 
     @Value("file:./../../../../../../../replication_schemas/user_streaming/user_role_changed/v1.json")
@@ -24,6 +24,9 @@ class EventProducer {
 
     @Value("file:./../../../../../../../replication_schemas/user_streaming/user_role_changed/v1.json")
     private lateinit var taskClosedV1: Resource
+
+    @Value("file:./../../../../../../../replication_schemas/task_streaming/task_jira_id_added/v1.json")
+    private lateinit var taskJiraIdAddedV1: Resource
 
     fun addTask(task: Task) {
         try {
@@ -76,6 +79,27 @@ class EventProducer {
             addEvent(
                 "ProducerBrokenTaskWorkflow", "TaskClosed", gson.toJson(
                     task.toReplicationClosedTask(eventVersion = "V1", producer = "task_manager")
+                )
+            )
+        }
+    }
+
+    fun addJiraIdToTask(task: Task) {
+        try {
+            addEvent(
+                "TaskStreaming", "TaskJiraIdAdded", checkSchema(
+                    gson.toJson(
+                        task.toReplicationJiraIdAdded(
+                            eventVersion = "V1",
+                            producer = "task_manager"
+                        )
+                    ), taskJiraIdAddedV1
+                )
+            )
+        } catch (exception: ReplicationBrokenException) {
+            addEvent(
+                "ProducerBrokenTaskStreaming", "TaskJiraIdAdded", gson.toJson(
+                    task.toReplicationJiraIdAdded(eventVersion = "V1", producer = "task_manager")
                 )
             )
         }

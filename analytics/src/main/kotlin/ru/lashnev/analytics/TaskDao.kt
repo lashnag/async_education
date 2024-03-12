@@ -19,4 +19,10 @@ class TaskDao {
         tasks.remove(updatedTask)
         tasks.add(updatedTask.copy(donePrice = donePrice))
     }
+
+    fun updateJiraId(taskPublicUid: String, jiraId: String) {
+        val updatedTask = tasks.find { it.taskPublicUid == taskPublicUid }!!
+        tasks.remove(updatedTask)
+        tasks.add(updatedTask.copy(jiraId = jiraId))
+    }
 }

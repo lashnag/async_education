@@ -21,7 +21,8 @@ data class Task(
     val taskPublicUid: String,
     val title: String,
     val donePrice: Long? = null,
-    val creationTime: LocalDateTime
+    val creationTime: LocalDateTime,
+    val jiraId: String?,
 )
 
 data class ReplicationUser(
@@ -41,12 +42,21 @@ data class ReplicationMetaData(
     val producer: String,
 )
 
-data class ReplicationCreateTask(
+data class ReplicationCreateTaskV1(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
     val creationTime: String,
     val metaData: ReplicationMetaData,
+)
+
+data class ReplicationCreateTaskV2(
+    val taskPublicUid: String,
+    val authorPublicUid: String,
+    val title: String,
+    val creationTime: String,
+    val metaData: ReplicationMetaData,
+    val jiraId: String,
 )
 
 data class ReplicationTaskDonePriceCalculated(
@@ -64,5 +74,11 @@ data class ReplicationAccountCreated(
 data class ReplicationAccountBalanceChanged(
     val accountPublicUid: String,
     val currentBalance: Long,
+    val metaData: ReplicationMetaData,
+)
+
+data class ReplicationJiraIdAddedToTask(
+    val taskPublicUid: String,
+    val jiraId: String,
     val metaData: ReplicationMetaData,
 )

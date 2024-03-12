@@ -23,17 +23,13 @@ class TaskDao {
         )
     }
 
-    fun closeTask(taskPublicUId: String) {
-        val updatedTask = tasks.find { it.taskPublicUid == taskPublicUId }!!
-        tasks.remove(updatedTask)
-        tasks.add(
-            updatedTask.copy(
-                taskStatus = TaskStatus.CLOSED
-            )
-        )
-    }
-
     fun getTask(taskPublicUid: String): Task {
         return tasks.find { it.taskPublicUid == taskPublicUid }!!
+    }
+
+    fun updateJiraId(taskPublicUid: String, jiraId: String) {
+        val updatedTask = tasks.find { it.taskPublicUid == taskPublicUid }!!
+        tasks.remove(updatedTask)
+        tasks.add(updatedTask.copy(jiraId = jiraId))
     }
 }

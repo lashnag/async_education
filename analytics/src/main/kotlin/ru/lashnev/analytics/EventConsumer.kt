@@ -35,8 +35,9 @@ class EventConsumer(
                             "UserRoleChanged" -> updateUserRole(record.value().toString())
                             "TaskCreated" -> createTask(record.value().toString())
                             "DonePriceCalculated" -> donePriceCalculated(record.value().toString())
-                            "AccountCreated" -> createAccount(record.value().toString())
+                            "AccountCreated" -> accountCreated(record.value().toString())
                             "AccountBalanceChanged" -> accountBalanceChanged(record.value().toString())
+                            "TaskJiraIdAdded" -> jiraIdAddedToTask(record.value().toString())
                         }
                     } catch (exception: ReplicationBrokenException) {
                         eventProducer.addEvent("BrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
@@ -66,8 +67,17 @@ class EventConsumer(
 
     private fun createTask(event: String) {
         try {
-            val task = gson.fromJson(event, ReplicationCreateTask::class.java)
-            taskDao.addTask(task.toTask())
+            when(event.getReplicationVersion()) {
+                ReplicationVersion.V1 -> {
+                    val task = gson.fromJson(event, ReplicationCreateTaskV1::class.java)
+                    taskDao.addTask(task.toTask())
+                }
+
+                ReplicationVersion.V2 -> {
+                    val task = gson.fromJson(event, ReplicationCreateTaskV2::class.java)
+                    taskDao.addTask(task.toTask())
+                }
+            }
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }
@@ -82,7 +92,7 @@ class EventConsumer(
         }
     }
 
-    private fun createAccount(event: String) {
+    private fun accountCreated(event: String) {
         try {
             val replicationAccountCreated = gson.fromJson(event, ReplicationAccountCreated::class.java)
             accountDao.addAccount(replicationAccountCreated.toAccount())
@@ -98,6 +108,30 @@ class EventConsumer(
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }
+    }
+
+    private fun jiraIdAddedToTask(event: String) {
+        try {
+            val jiraIdAdded = gson.fromJson(event, ReplicationJiraIdAddedToTask::class.java)
+            taskDao.updateJiraId(jiraIdAdded.taskPublicUid, jiraIdAdded.jiraId)
+        } catch (exception: RuntimeException) {
+            throw ReplicationBrokenException()
+        }
+    }
+
+    private fun String.getReplicationVersion(): ReplicationVersion {
+        if(this.contains("V1")) {
+            return ReplicationVersion.V1
+        }
+        if(this.contains("V2")) {
+            return ReplicationVersion.V2
+        }
+
+        throw java.lang.RuntimeException()
+    }
+
+    enum class ReplicationVersion {
+        V1, V2
     }
 
     companion object {

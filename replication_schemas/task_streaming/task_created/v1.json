@@ -26,5 +26,5 @@
       "required": ["eventVersion", "eventId", "eventTime", "producer", "creationTime"]
     }
   },
-  "required": ["taskPublicUid", "assignedUserPublicUid", "metadata"]
+  "required": ["taskPublicUid", "assignedUserPublicUid", "creationTime", "metadata"]
 }

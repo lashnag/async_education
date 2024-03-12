@@ -18,11 +18,21 @@ fun ReplicationRole.toRole(): Role {
     }
 }
 
-fun ReplicationCreateTask.toTask(): Task {
+fun ReplicationCreateTaskV1.toTask(): Task {
     return Task(
         taskPublicUid = this.taskPublicUid,
         title = title,
         creationTime = LocalDateTime.parse(this.creationTime),
+        jiraId = null,
+    )
+}
+
+fun ReplicationCreateTaskV2.toTask(): Task {
+    return Task(
+        taskPublicUid = this.taskPublicUid,
+        title = this.title,
+        creationTime = LocalDateTime.parse(this.creationTime),
+        jiraId = this.jiraId,
     )
 }
 

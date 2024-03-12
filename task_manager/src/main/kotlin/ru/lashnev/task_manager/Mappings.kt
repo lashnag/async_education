@@ -35,6 +35,19 @@ fun Task.toReplicationTask(eventVersion: String, producer: String): ReplicationC
     )
 }
 
+fun Task.toReplicationJiraIdAdded(eventVersion: String, producer: String): ReplicationJiraIdAddedToTask {
+    return ReplicationJiraIdAddedToTask(
+        taskPublicUid = this.taskPublicUid.toString(),
+        jiraId = this.jiraId,
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = eventVersion,
+            producer = producer,
+        )
+    )
+}
+
 fun Task.toReplicationAssignedTask(eventVersion: String, producer: String): ReplicationAssignedTask {
     return ReplicationAssignedTask(
         taskPublicUid = this.taskPublicUid.toString(),

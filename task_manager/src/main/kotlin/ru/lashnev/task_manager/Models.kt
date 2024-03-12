@@ -8,6 +8,7 @@ data class Task(
     val taskPublicUid: UUID,
     val authorPublicUid: String,
     val title: String,
+    val jiraId: String,
     val creationTime: LocalDateTime = LocalDateTime.now(),
     val description: String,
     val assignedUserPublicUid: String,
@@ -62,4 +63,10 @@ data class ReplicationMetaData(
     val eventId: String,
     val eventTime: String,
     val producer: String,
+)
+
+data class ReplicationJiraIdAddedToTask(
+    val taskPublicUid: String,
+    val jiraId: String,
+    val metaData: ReplicationMetaData,
 )
