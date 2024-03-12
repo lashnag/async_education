@@ -44,7 +44,7 @@ class AnalyticsController(
         val suitableTasks = taskDao.getTasks().filter {
             Duration.between(it.creationTime, LocalDateTime.now()) <= duration
         }
-        val theMostExpensiveTask = suitableTasks.maxBy { it.donePrice!! }
+        val theMostExpensiveTask = suitableTasks.maxBy { it.donePrice }
         return "The most expensive task is $theMostExpensiveTask"
     }
 }

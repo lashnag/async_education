@@ -4,25 +4,35 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class TaskDao {
-    private val tasks: MutableSet<Task> = mutableSetOf()
+    private val tasksWithoutPrice: MutableSet<PartialTaskWithoutPrice> = mutableSetOf()
+    private val taskPrices: MutableSet<TaskPrice> = mutableSetOf()
 
-    fun addTask(task: Task) {
-        tasks.add(task)
+    fun addTaskWithoutPrice(task: PartialTaskWithoutPrice) {
+        tasksWithoutPrice.add(task)
     }
 
     fun getTasks(): Set<Task> {
-        return tasks
+        return tasksWithoutPrice.filter { partialTask ->
+            taskPrices.any { it.taskPublicUid ==  partialTask.taskPublicUid }
+        }.map { partialTask ->
+        val donePrice = taskPrices.find { it.taskPublicUid == partialTask.taskPublicUid }!!
+            Task(
+                taskPublicUid = partialTask.taskPublicUid,
+                title = partialTask.title,
+                creationTime = partialTask.creationTime,
+                jiraId = partialTask.jiraId,
+                donePrice = donePrice.donePrice
+            )
+        }.toSet()
     }
 
-    fun updateDonePrice(taskPublicUid: String, donePrice: Long) {
-        val updatedTask = tasks.find { it.taskPublicUid == taskPublicUid }!!
-        tasks.remove(updatedTask)
-        tasks.add(updatedTask.copy(donePrice = donePrice))
+    fun addDonePrice(taskPublicUid: String, donePrice: Long) {
+        taskPrices.add(TaskPrice(taskPublicUid = taskPublicUid, donePrice = donePrice))
     }
 
     fun updateJiraId(taskPublicUid: String, jiraId: String) {
-        val updatedTask = tasks.find { it.taskPublicUid == taskPublicUid }!!
-        tasks.remove(updatedTask)
-        tasks.add(updatedTask.copy(jiraId = jiraId))
+        val updatedTask = tasksWithoutPrice.find { it.taskPublicUid == taskPublicUid }!!
+        tasksWithoutPrice.remove(updatedTask)
+        tasksWithoutPrice.add(updatedTask.copy(jiraId = jiraId))
     }
 }

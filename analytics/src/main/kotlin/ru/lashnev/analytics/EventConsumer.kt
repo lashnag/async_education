@@ -70,12 +70,12 @@ class EventConsumer(
             when(event.getReplicationVersion()) {
                 ReplicationVersion.V1 -> {
                     val task = gson.fromJson(event, ReplicationCreateTaskV1::class.java)
-                    taskDao.addTask(task.toTask())
+                    taskDao.addTaskWithoutPrice(task.toTask())
                 }
 
                 ReplicationVersion.V2 -> {
                     val task = gson.fromJson(event, ReplicationCreateTaskV2::class.java)
-                    taskDao.addTask(task.toTask())
+                    taskDao.addTaskWithoutPrice(task.toTask())
                 }
             }
         } catch (exception: RuntimeException) {
@@ -86,7 +86,7 @@ class EventConsumer(
     private fun donePriceCalculated(event: String) {
         try {
             val donePriceCalculated = gson.fromJson(event, ReplicationTaskDonePriceCalculated::class.java)
-            taskDao.updateDonePrice(donePriceCalculated.taskPublicUid, donePriceCalculated.price)
+            taskDao.addDonePrice(donePriceCalculated.taskPublicUid, donePriceCalculated.price)
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }

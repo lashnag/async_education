@@ -96,7 +96,7 @@ class EventConsumer(
                     amount = -task.assignedPrice!!,
                     description = "Task reassign ${task.title}"
                 )
-                eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid!!))
+                eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
             }
             val randomAssignedPrice = (10..20).shuffled().first().toLong()
             val currentUserAccount = accountDao.getUserAccount(task.assignedUserPublicUid!!)
@@ -105,7 +105,7 @@ class EventConsumer(
                 amount = randomAssignedPrice,
                 description = "Task assigned ${task.title}"
             )
-            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid!!))
+            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
             val randomDonePrice = (20..40).shuffled().first().toLong()
             taskDao.assignTask(
                 taskPublicUId = assignedTask.taskPublicUid,
@@ -130,7 +130,7 @@ class EventConsumer(
                 amount = task.donePrice!!,
                 description = "Task closed ${task.title}"
             )
-            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid!!))
+            eventProducer.accountBalanceChanged(accountDao.getUserAccount(task.assignedUserPublicUid))
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }

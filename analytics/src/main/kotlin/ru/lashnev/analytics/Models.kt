@@ -20,9 +20,21 @@ data class Account(
 data class Task(
     val taskPublicUid: String,
     val title: String,
-    val donePrice: Long? = null,
+    val donePrice: Long,
     val creationTime: LocalDateTime,
     val jiraId: String?,
+)
+
+data class PartialTaskWithoutPrice(
+    val taskPublicUid: String,
+    val title: String,
+    val creationTime: LocalDateTime,
+    val jiraId: String?,
+)
+
+data class TaskPrice(
+    val taskPublicUid: String,
+    val donePrice: Long,
 )
 
 data class ReplicationUser(

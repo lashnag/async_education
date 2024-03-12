@@ -18,8 +18,8 @@ fun ReplicationRole.toRole(): Role {
     }
 }
 
-fun ReplicationCreateTaskV1.toTask(): Task {
-    return Task(
+fun ReplicationCreateTaskV1.toTask(): PartialTaskWithoutPrice {
+    return PartialTaskWithoutPrice(
         taskPublicUid = this.taskPublicUid,
         title = title,
         creationTime = LocalDateTime.parse(this.creationTime),
@@ -27,8 +27,8 @@ fun ReplicationCreateTaskV1.toTask(): Task {
     )
 }
 
-fun ReplicationCreateTaskV2.toTask(): Task {
-    return Task(
+fun ReplicationCreateTaskV2.toTask(): PartialTaskWithoutPrice {
+    return PartialTaskWithoutPrice(
         taskPublicUid = this.taskPublicUid,
         title = this.title,
         creationTime = LocalDateTime.parse(this.creationTime),
