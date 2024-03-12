@@ -21,7 +21,7 @@ data class Task(
     val taskPublicUid: String,
     val title: String,
     val donePrice: Long? = null,
-    val creationDate: LocalDateTime
+    val creationTime: LocalDateTime
 )
 
 data class ReplicationUser(
@@ -45,7 +45,8 @@ data class ReplicationCreateTask(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
-    val jiraId: String? = null,
+    val jiraId: String,
+    val creationTime: String,
     val metaData: ReplicationMetaData,
 )
 

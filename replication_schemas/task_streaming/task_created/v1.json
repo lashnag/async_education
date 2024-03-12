@@ -11,6 +11,10 @@
     "title": {
       "type": "string"
     },
+    "creationTime": {
+      "type": "string",
+      "format": "date-time"
+    },
     "metadata": {
       "type": "object",
       "properties": {
@@ -19,7 +23,7 @@
         "eventTime": { "type": "string" },
         "producer": { "type": "string" }
       },
-      "required": ["eventVersion", "eventId", "eventTime", "producer"]
+      "required": ["eventVersion", "eventId", "eventTime", "producer", "creationTime"]
     }
   },
   "required": ["taskPublicUid", "assignedUserPublicUid", "metadata"]

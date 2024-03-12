@@ -25,6 +25,7 @@ fun Task.toReplicationTask(eventVersion: String, producer: String): ReplicationC
         authorPublicUid = this.authorPublicUid,
         jiraId = jiraId,
         title = this.description,
+        creationTime = this.creationTime.toString(),
         metaData = ReplicationMetaData(
             eventId = UUID.randomUUID().toString(),
             eventTime = Date().toString(),

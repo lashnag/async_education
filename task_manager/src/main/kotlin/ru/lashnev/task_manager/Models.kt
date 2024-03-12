@@ -1,5 +1,6 @@
 package ru.lashnev.task_manager
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class Task(
@@ -7,7 +8,8 @@ data class Task(
     val taskPublicUid: UUID,
     val authorPublicUid: String,
     val title: String,
-    val jiraId: String?,
+    val jiraId: String,
+    val creationTime: LocalDateTime = LocalDateTime.now(),
     val description: String,
     val assignedUserPublicUid: String,
     val status: TaskStatus = TaskStatus.OPEN,
@@ -30,7 +32,8 @@ data class ReplicationCreateTask(
     val taskPublicUid: String,
     val authorPublicUid: String,
     val title: String,
-    val jiraId: String?,
+    val creationTime: String,
+    val jiraId: String,
     val metaData: ReplicationMetaData,
 )
 
