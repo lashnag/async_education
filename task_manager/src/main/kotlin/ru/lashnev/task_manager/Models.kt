@@ -8,7 +8,6 @@ data class Task(
     val taskPublicUid: UUID,
     val authorPublicUid: String,
     val title: String,
-    val jiraId: String,
     val creationTime: LocalDateTime = LocalDateTime.now(),
     val description: String,
     val assignedUserPublicUid: String,

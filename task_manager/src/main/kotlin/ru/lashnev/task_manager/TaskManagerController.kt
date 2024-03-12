@@ -31,14 +31,14 @@ class TaskManagerController(
             .filter { it.role != Role.MANAGER && it.role != Role.ADMIN }
             .random()
         val task = Task(
-            Random.nextInt(),
-            UUID.randomUUID(),
-            userPublicUid,
-            taskDescription,
-            assignedUser.publicUid,
-            taskTitle,
-            jiraId
+            id = Random.nextInt(),
+            taskPublicUid = UUID.randomUUID(),
+            authorPublicUid = userPublicUid,
+            description = taskDescription,
+            assignedUserPublicUid = assignedUser.publicUid,
+            title = taskTitle
         )
+
         taskDao.save(task)
         eventProducer.addTask(task)
         eventProducer.taskAssigned(task)
