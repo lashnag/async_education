@@ -26,15 +26,16 @@ class EventProducer {
 
     fun addUser(user: UserDetails) {
         try {
-            addEvent("UserStreaming", "UserCreated", checkSchema(
-                gson.toJson(
-                    user.toReplicationUser(eventVersion = "V1", producer = "users")
-                ), userRoleChangedV1
-            )
+            addEvent(
+                "UserStreaming", "UserCreated", checkSchema(
+                    gson.toJson(
+                        user.toReplicationUser(eventVersion = "V1", producer = "users")
+                    ), userRoleChangedV1
+                )
             )
         } catch (exception: ReplicationContractBrokenException) {
             addEvent(
-                "ProducerBrokenUserStreaming", "UserCreated", gson.toJson(
+                "UserServiceProducerBrokenUserStreaming", "UserCreated", gson.toJson(
                     user.toReplicationUser(eventVersion = "V1", producer = "users")
                 )
             )
@@ -53,7 +54,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationContractBrokenException) {
             addEvent(
-                "ProducerBrokenUserStreaming",
+                "UserServiceProducerBrokenUserStreaming",
                 "UserRoleChanged",
                 gson.toJson(user.toReplicationUser(eventVersion = "V1", producer = "users"))
             )

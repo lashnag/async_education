@@ -40,7 +40,7 @@ class EventConsumer(
                             "TaskJiraIdAdded" -> jiraIdAddedToTask(record.value().toString())
                         }
                     } catch (exception: ReplicationBrokenException) {
-                        eventProducer.addEvent("BrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
+                        eventProducer.addEvent("AccountingBrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
                     }
                 }
             }

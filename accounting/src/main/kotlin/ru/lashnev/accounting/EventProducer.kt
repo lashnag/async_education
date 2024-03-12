@@ -39,7 +39,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenAccountStreaming", "AccountCreated", gson.toJson(
+                "AccountingProducerBrokenAccountStreaming", "AccountCreated", gson.toJson(
                     account.toReplicationAccountCreated(eventVersion = "V1", producer = "task_manager")
                 )
             )
@@ -56,7 +56,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenAccountStreaming", "AccountBalanceChanged", gson.toJson(
+                "AccountingProducerBrokenAccountStreaming", "AccountBalanceChanged", gson.toJson(
                     account.toReplicationAccountBalanceChanged(eventVersion = "V1", producer = "task_manager")
                 )
             )
@@ -74,7 +74,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenAccountStreaming", "DonePriceCalculated", gson.toJson(
+                "AccountingProducerBrokenAccountStreaming", "DonePriceCalculated", gson.toJson(
                     task.toReplicationTaskDonePriceCalculated(eventVersion = "V1", producer = "task_manager")
                 )
             )

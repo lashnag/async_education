@@ -42,7 +42,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenTaskStreaming", "TaskCreated", gson.toJson(
+                "TaskManagerProducerBrokenTaskStreaming", "TaskCreated", gson.toJson(
                     task.toReplicationTask(eventVersion = "V1", producer = "task_manager")
                 )
             )
@@ -59,7 +59,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenTaskWorkflow", "TaskAssigned", gson.toJson(
+                "TaskManagerProducerBrokenTaskWorkflow", "TaskAssigned", gson.toJson(
                     task.toReplicationAssignedTask(eventVersion = "V1", producer = "task_manager")
                 )
             )
@@ -77,7 +77,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenTaskWorkflow", "TaskClosed", gson.toJson(
+                "TaskManagerProducerBrokenTaskWorkflow", "TaskClosed", gson.toJson(
                     task.toReplicationClosedTask(eventVersion = "V1", producer = "task_manager")
                 )
             )
@@ -98,7 +98,7 @@ class EventProducer {
             )
         } catch (exception: ReplicationBrokenException) {
             addEvent(
-                "ProducerBrokenTaskStreaming", "TaskJiraIdAdded", gson.toJson(
+                "TaskManagerProducerBrokenTaskStreaming", "TaskJiraIdAdded", gson.toJson(
                     task.toReplicationJiraIdAdded(eventVersion = "V1", producer = "task_manager")
                 )
             )

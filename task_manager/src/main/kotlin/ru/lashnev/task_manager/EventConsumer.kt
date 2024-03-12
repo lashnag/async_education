@@ -30,7 +30,7 @@ class EventConsumer(private val userDao: UserDao, private val eventProducer: Eve
                             "UserRoleChanged" -> updateUserRole(record.value().toString())
                         }
                     } catch (exception: ReplicationBrokenException) {
-                        eventProducer.addEvent("BrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
+                        eventProducer.addEvent("TaskManagerBrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
                     }
                 }
             }
