@@ -27,7 +27,7 @@ class EventConsumer(
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         KafkaConsumer<Any?, Any?>(props).use { consumer ->
-            consumer.subscribe(listOf("UserStreaming", "TaskStreaming", "TaskWorkflow"))
+            consumer.subscribe(listOf("UserStreaming", "TaskStreaming", "TaskWorkflow", "RepeatTaskStreaming"))
             while (true) {
                 val records = consumer.poll(Duration.ofSeconds(1))
                 for (record in records) {
@@ -39,8 +39,10 @@ class EventConsumer(
                             "TaskAssigned" -> assignTask(record.value().toString())
                             "TaskClosed" -> closeTask(record.value().toString())
                             "TaskJiraIdAdded" -> jiraIdAddedToTask(record.value().toString())
+                            "RepeatTaskAssigned" -> repeatAssignTask(record.value().toString())
                         }
-                    } catch (exception: ReplicationBrokenException) {
+                    }
+                    catch (exception: ReplicationBrokenException) {
                         eventProducer.addEvent("AccountingBrokenConsumer${record.key().toString()}", record.topic(), record.value().toString())
                     }
                 }
@@ -117,6 +119,28 @@ class EventConsumer(
                 assignedUserPublicUid = assignedTask.assignedUserPublicUid,
             )
             eventProducer.donePriceCalculated(taskDao.getTask(assignedTask.taskPublicUid))
+        } catch (exception: RuntimeException) {
+            throw ReplicationBrokenException()
+        }
+    }
+
+    fun repeatAssignTask(event: String) {
+        try {
+            val repeatAssignedTask = gson.fromJson(event, RepeatReplicationAssignedTask::class.java)
+            if(repeatAssignedTask.repeatCount > 3) {
+                throw RuntimeException()
+            }
+            try {
+                assignTask(gson.toJson(repeatAssignedTask.toReplicationAssignedTask("Accounting")))
+            } catch (exception: RuntimeException) {
+                if(exception is CantFindAccountException) {
+                    eventProducer.addEvent(
+                        "RepeatTaskStreaming",
+                        "RepeatTaskAssigned",
+                        gson.toJson(repeatAssignedTask.copy(repeatCount = repeatAssignedTask.repeatCount + 1))
+                    )
+                } else throw exception
+            }
         } catch (exception: RuntimeException) {
             throw ReplicationBrokenException()
         }

@@ -21,7 +21,7 @@ class AccountDao {
     }
 
     fun getUserAccount(userPublicUid: String): Account {
-        return accounts.find { it.userPublicId == userPublicUid}!!
+        return accounts.find { it.userPublicId == userPublicUid} ?: throw CantFindAccountException()
     }
 
     fun getAccounts(): Set<Account> {

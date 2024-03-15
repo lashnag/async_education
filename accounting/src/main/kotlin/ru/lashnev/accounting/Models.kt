@@ -116,3 +116,10 @@ data class ReplicationOperation(
     val changeAmount: Long,
     val metaData: ReplicationMetaData,
 )
+
+data class RepeatReplicationAssignedTask(
+    val repeatCount: Int,
+    val taskPublicUid: String,
+    val assignedUserPublicUid: String,
+    val metaData: ReplicationMetaData,
+)

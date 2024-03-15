@@ -11,6 +11,7 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.util.*
 
 @Service
@@ -91,7 +92,7 @@ class EventProducer {
         }
     }
 
-    fun addEvent(topic: String, key: String, json: String) {
+    fun addEvent(topic: String, key: String, json: String, delay: Duration = Duration.ZERO) {
         val props = Properties()
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name

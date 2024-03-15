@@ -89,3 +89,30 @@ fun Operation.toReplicationOperation(accountPublicUId: String, eventVersion: Str
         ),
     )
 }
+
+fun RepeatReplicationAssignedTask.toReplicationAssignedTask(producer: String): ReplicationAssignedTask {
+    return ReplicationAssignedTask(
+        assignedUserPublicUid = this.assignedUserPublicUid,
+        taskPublicUid = this.taskPublicUid,
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = this.metaData.eventVersion,
+            producer = producer,
+        ),
+    )
+}
+
+fun ReplicationAssignedTask.toRepeatReplicationAssignedTask(repeatCount: Int, producer: String): RepeatReplicationAssignedTask {
+    return RepeatReplicationAssignedTask(
+        repeatCount = repeatCount,
+        assignedUserPublicUid = this.assignedUserPublicUid,
+        taskPublicUid = this.taskPublicUid,
+        metaData = ReplicationMetaData(
+            eventId = UUID.randomUUID().toString(),
+            eventTime = Date().toString(),
+            eventVersion = this.metaData.eventVersion,
+            producer = producer,
+        ),
+    )
+}
